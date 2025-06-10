@@ -1,4 +1,4 @@
-FROM circleci/runner:latest
+FROM circleci/runner:f2489d2-dev
 
 # Copy script đăng ký + khởi động
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
