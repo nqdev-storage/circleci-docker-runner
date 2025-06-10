@@ -24,6 +24,7 @@
 #
 # 📄 Tham khảo thêm:
 #   https://circleci.com/docs/self-hosted-runner
+#   https://github.com/nqdev-storage/circleci-docker-runner
 ################################################################################
 
 services:
