@@ -1,7 +1,10 @@
-FROM circleci/runner:f2489d2-dev
+FROM circleci/runner:latest
 
-# Copy script đăng ký + khởi động
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Sao chép vào thư mục không bị giới hạn
+COPY entrypoint.sh /tmp/entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Đặt quyền thực thi (vì trong /tmp bạn có quyền)
+RUN chmod +x /tmp/entrypoint.sh
+
+# Dùng entrypoint từ /tmp
+ENTRYPOINT ["/tmp/entrypoint.sh"]

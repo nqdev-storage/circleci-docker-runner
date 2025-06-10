@@ -29,7 +29,7 @@
 
 services:
   circleci-runner:
-    image: ghcr.io/nqdev-storage/circleci-docker-runner:latest
+    image: circleci/runner:f2489d2-dev
     container_name: circleci-runner
     restart: unless-stopped
     # network_mode: host
@@ -37,11 +37,14 @@ services:
     #   - "9000:9000"   # Web UI
     environment:
       - TZ=Asia/Ho_Chi_Minh
-      - RUNNER_TOKEN=${RUNNER_TOKEN}
+      - CIRCLECI_TOKEN=${CIRCLECI_TOKEN}
+      - RESOURCE_CLASS=${RESOURCE_CLASS}
+      - RUNNER_NAME=${RUNNER_NAME}
+      - RUNNER_LABELS=${RUNNER_LABELS}
     env_file:
       - .env
     volumes:
-      - runner-data:/circleci
+      - runner-data:/runner/data
     extra_hosts:
       - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
     deploy:
