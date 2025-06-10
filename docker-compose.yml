@@ -1,11 +1,55 @@
+################################################################################
+# 📦 Docker Compose for CircleCI Self-Hosted Runner
+#
+# 📝 Mục đích:
+#   Chạy self-hosted CircleCI runner trong container bằng image từ GHCR.
+#
+# 🧪 Công nghệ sử dụng:
+#   - Docker Compose
+#   - Image: ghcr.io/nqdev-storage/circleci-docker-runner:latest
+#   - CircleCI Self-Hosted Runner
+#
+# 👤 Tác giả: nqdev
+# 📅 Ngày tạo: 2025-06-10
+#
+# 📁 Yêu cầu:
+#   - Docker + Docker Compose đã được cài trên host
+#   - File `.env` chứa RUNNER_TOKEN từ CircleCI
+#
+# 🚀 Khởi chạy:
+#   docker compose up -d
+#
+# 🛑 Dừng container:
+#   docker compose down
+#
+# 📄 Tham khảo thêm:
+#   https://circleci.com/docs/self-hosted-runner
+################################################################################
 
 services:
   circleci-runner:
     image: ghcr.io/nqdev-storage/circleci-docker-runner:latest
     container_name: circleci-runner
     restart: unless-stopped
+    # network_mode: host
+    # ports:
+    #   - "9000:9000"   # Web UI
     environment:
+      - TZ=Asia/Ho_Chi_Minh
       - RUNNER_TOKEN=${RUNNER_TOKEN}
+    env_file:
+      - .env
     volumes:
-  - runner-data:/circleci
+      - runner-data:/circleci
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Để kết nối đến localhost của host từ container
+    deploy:
+      resources:
+        limits:
+          cpus: "0.80" # Giới hạn 80% CPU
+          memory: "3.2G" # Giới hạn 3.2GB RAM (80% của 4GB)
+        reservations:
+          memory: "256M" # Đảm bảo container có ít nhất 256MB RAM
 
+volumes:
+  runner-data:
