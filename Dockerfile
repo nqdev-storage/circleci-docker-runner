@@ -16,7 +16,7 @@ WORKDIR /circleci
 
 # Tải CircleCI Launch Agent
 RUN curl -fSL \
-  https://circleci-binary-releases.s3.amazonaws.com/circleci-launch-agent/${LAUNCH_AGENT_VERSION}/circleci-launch-agent_linux_amd64 \
+  https://circleci-binary-releases.s3.amazonaws.com/circleci-launch-agent/latest/circleci-launch-agent_linux_amd64 \
   -o /usr/local/bin/circleci-launch-agent \
   && chmod +x /usr/local/bin/circleci-launch-agent
 
