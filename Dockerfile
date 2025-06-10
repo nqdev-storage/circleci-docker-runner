@@ -6,7 +6,7 @@ USER root
 COPY entrypoint.sh /tmp/entrypoint.sh
 
 # Đặt quyền thực thi (vì trong /tmp bạn có quyền)
-RUN chmod +x /tmp/entrypoint.sh
+RUN sudo chmod +x /tmp/entrypoint.sh
 
 # Dùng entrypoint từ /tmp
 ENTRYPOINT ["/tmp/entrypoint.sh"]
