@@ -22,6 +22,9 @@ jobs:
         run: |
           if [ -f VERSION ]; then
             VERSION=$(cat VERSION | tr -d '\n')
+            YEAR=$(date +'%Y')
+            VERSION="1.${YEAR}.${{ github.run_number }}"
+            echo "$VERSION" > VERSION
           else
             YEAR=$(date +'%Y')
             VERSION="1.${YEAR}.${{ github.run_number }}"
