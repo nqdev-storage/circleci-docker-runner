@@ -1,6 +1,7 @@
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LAUNCH_AGENT_VERSION=1.0.16427
 
 # Cài đặt các gói cần thiết
 RUN apt-get update && apt-get install -y \
@@ -13,10 +14,11 @@ RUN apt-get update && apt-get install -y \
 # Tạo thư mục runner
 WORKDIR /circleci
 
-# Tải binary CircleCI runner mới nhất
-RUN curl -L https://circleci-binary-releases.s3.amazonaws.com/circleci-runner-release/latest/linux/amd64/circleci-runner \
-    -o /usr/local/bin/circleci-runner && \
-    chmod +x /usr/local/bin/circleci-runner
+# Tải CircleCI Launch Agent
+RUN curl -fSL \
+  https://circleci-binary-releases.s3.amazonaws.com/circleci-launch-agent/${LAUNCH_AGENT_VERSION}/circleci-launch-agent_linux_amd64 \
+  -o /usr/local/bin/circleci-launch-agent \
+  && chmod +x /usr/local/bin/circleci-launch-agent
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
