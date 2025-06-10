@@ -1,0 +1,48 @@
+name: Build & Push CircleCI Docker Runner
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image name
+        id: vars
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/circleci-docker-runner
+          echo "image=$IMAGE_NAME" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ steps.vars.outputs.image }} -t circleci-docker-runner .
+
+      - name: Push image to GHCR
+        run: |
+          docker push ${{ steps.vars.outputs.image }}
+
+    # (Optional) This part only works if self-hosted GitHub runner is used.
+    # Do not include it in normal GitHub-hosted runners.
+    # - name: Run CircleCI Runner Container (ONLY FOR SELF-HOSTED RUNNER)
+    #   run: |
+    #     docker run -d \
+    #       --name circleci-runner \
+    #       -e RUNNER_TOKEN=${{ secrets.RUNNER_TOKEN }} \
+    #       ${{ steps.vars.outputs.image }}
