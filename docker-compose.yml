@@ -29,7 +29,7 @@
 
 services:
   circleci-runner:
-    image: circleci/runner:f2489d2-dev
+    image: ghcr.io/nqdev-storage/circleci-docker-runner:latest
     container_name: circleci-runner
     restart: unless-stopped
     # network_mode: host

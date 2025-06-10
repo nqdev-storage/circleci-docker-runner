@@ -1,4 +1,4 @@
-FROM circleci/runner:latest
+FROM circleci/runner:f2489d2-dev
 
 # Sao chép vào thư mục không bị giới hạn
 COPY entrypoint.sh /tmp/entrypoint.sh
