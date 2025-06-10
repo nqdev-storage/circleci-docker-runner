@@ -1,0 +1,11 @@
+
+services:
+  circleci-runner:
+    image: ghcr.io/nqdev-storage/circleci-docker-runner:latest
+    container_name: circleci-runner
+    restart: unless-stopped
+    environment:
+      - RUNNER_TOKEN=${RUNNER_TOKEN}
+    volumes:
+  - runner-data:/circleci
+
