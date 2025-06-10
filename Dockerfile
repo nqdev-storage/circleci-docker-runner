@@ -1,12 +1,25 @@
-FROM circleci/runner:f2489d2-dev
+FROM ubuntu:20.04
 
 USER root
 
-# Sao chép vào thư mục không bị giới hạn
-COPY entrypoint.sh /tmp/entrypoint.sh
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Đặt quyền thực thi (vì trong /tmp bạn có quyền)
-RUN sudo chmod +x /tmp/entrypoint.sh
+# Cài đặt curl và CA certificates
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-# Dùng entrypoint từ /tmp
-ENTRYPOINT ["/tmp/entrypoint.sh"]
+# Tạo thư mục làm việc cho runner
+RUN mkdir -p /runner/data
+
+# Tải CircleCI runner binary
+RUN curl -L -o /usr/local/bin/circleci-runner https://circleci-binary-releases.s3.amazonaws.com/circleci-runner/latest/circleci-runner-linux-amd64 && \
+    chmod +x /usr/local/bin/circleci-runner
+
+# Copy script khởi động
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
